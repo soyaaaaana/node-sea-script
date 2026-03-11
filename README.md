@@ -36,7 +36,8 @@ Windowsの場合は `node.exe`、Linuxの場合は `node` になります。
 ├── host_node/
 │   └── node.exe  // v25.8.0 Windows x64（nodeフォルダのNode.jsとバージョンを合わせる）
 ├── node_sea_build.ps1
-└── node_sea_build.bat
+├── node_sea_build.bat
+└── package.json  // npm
 ```
 
 ## スクリプトのテスト済み環境
