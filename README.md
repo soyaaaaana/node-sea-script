@@ -19,8 +19,8 @@ Node SEA (Single executable applications) を使用することで、1つのJava
 
 `package.json` に `main` キーがあると、ファイル名指定のときにそのままEnterで実行できて楽です。
 
-<a id="other_platform"></a>
 ## 別バージョン、別アーキテクチャ、別プラットフォーム向けにビルドする場合
+<a id="other_platform"></a>
 `node` フォルダを作成して、ビルド環境と同じバージョンのNode.jsバイナリを配置します。
 <br>
 Windowsの場合は `node.exe`、Linuxの場合は `node` になります。
