@@ -40,15 +40,16 @@ Windowsの場合は `node.exe`、Linuxの場合は `node` になります。
 ```
 
 ## スクリプトのテスト済み環境
-| ビルド環境      | host_nodeバージョン | ビルドターゲット               | 成功したかどうか |
-|:---------------|:-------------------|:------------------------------|:--------------:|
-| Windows 11 x64 | Node.js v25.8.0    | Node.js v25.8.0, Windows x64  | ✅             |
-| Windows 11 x64 | Node.js v25.8.0    | Node.js v25.8.0, Linux ARM64  | ✅             |
-| Windows 11 x64 | Node.js v25.5.0    | Node.js v25.5.0, Windows x64  | ✅             |
-| Windows 11 x64 | Node.js v23.11.0   | Node.js v23.11.0, Windows x64 | ✅             |
-| Windows 11 x64 | Node.js v23.11.0   | Node.js v23.11.0, Linux ARM64 | ✅             |
-| Windows 11 x64 | Node.js v25.8.0    | Node.js v25.5.0, Windows x64  | ❌             |
-| Windows 11 x64 | Node.js v25.8.0    | Node.js v23.11.0, Windows x64 | ❌             |
+| ビルド環境                        | host_nodeバージョン | ビルドターゲット               | 成功したかどうか |
+|:---------------------------------|:-------------------|:------------------------------|:--------------:|
+| Node.js v25.8.0, Windows 11 x64  | Node.js v25.8.0    | Node.js v25.8.0, Windows x64  | ✅             |
+| Node.js v25.8.0, Windows 11 x64  | Node.js v25.8.0    | Node.js v25.8.0, Linux ARM64  | ✅             |
+| Node.js v25.8.0, Windows 11 x64  | Node.js v25.5.0    | Node.js v25.5.0, Windows x64  | ✅             |
+| Node.js v23.11.0, Windows 11 x64 | Node.js v23.11.0   | Node.js v23.11.0, Windows x64 | ✅             |
+| Node.js v23.11.0, Windows 11 x64 | Node.js v23.11.0   | Node.js v23.11.0, Linux ARM64 | ✅             |
+| Node.js v25.8.0, Windows 11 x64  | Node.js v23.11.0   | Node.js v23.11.0, Windows x64 | ❌             |
+| Node.js v25.8.0, Windows 11 x64  | Node.js v25.8.0    | Node.js v25.5.0, Windows x64  | ❌             |
+| Node.js v25.8.0, Windows 11 x64  | Node.js v25.8.0    | Node.js v23.11.0, Windows x64 | ❌             |
 
 ## ライセンス
 MITライセンスです。自由に使用、改変、再配布することができますが、著作権表示とライセンス文を保持する必要があります。
