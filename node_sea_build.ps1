@@ -24,7 +24,7 @@ function Pause {
         do {
             $pause_key = [Console]::ReadKey($true)
         } while (
-            # 仮想キーコードが修飾キー（Shift:16, Ctrl:17, Alt:18）であるか判定
+            # 仮想キーコードが修飾キー（Shift:16, Ctrl:17, Alt:18）かどうか
             ($pause_key.VirtualKeyCode -ge 16 -and $pause_key.VirtualKeyCode -le 18) -or
             # 修飾キー（Control, Alt）が押されている状態を無視
             ($pause_key.Modifiers -ne 0)
@@ -45,6 +45,10 @@ $node_path = where.exe node.exe 2>&1
 if ($LASTEXITCODE -eq 1) {
     Write-Host "node.exeが見つかりませんでした。"
     ExitScript
+}
+
+if ((Test-Path "$PSScriptRoot\host_node\node.exe")) {
+    $node_path = "$PSScriptRoot\host_node\node.exe"
 }
 
 # プラットフォームの選択
@@ -77,15 +81,24 @@ while ($true) {
     if ($count -ne 0) {
         Write-Host "エラー: 存在しないファイルが選択されました。"
     }
+
     Write-Host -NoNewline "メインのJavaScriptファイルを指定してください($($json.main)): "
     $main_input = Read-Host
+
     if ($main_input -eq "") {
         $main = $json.main
     }
     else {
         $main = $main_input
     }
+
     if ((Test-Path "$PSScriptRoot\$main") -eq "True") {
+        break
+    }
+
+    # 拡張子を省略しても大丈夫
+    if ((Test-Path "$PSScriptRoot\$main.js") -eq "True") {
+        $main = "$main.js"
         break
     }
     $count++
@@ -126,7 +139,7 @@ if ($current_node_version -ge $build_sea_node_verison) { # v25.5.0以上（node 
 
     if ($platform -eq 1) {
         $binary_name = "$name.exe"
-        if ((Test-Path "$PSScriptRoot\node\node.exe") -eq "True" -and (& "$PSScriptRoot\node\node.exe" -v) -eq (& "$node_path" -v)) {
+        if ((Test-Path "$PSScriptRoot\node\node.exe") -eq "True") {
             $node_binary_path = "$PSScriptRoot\node\node.exe"
         }
         else {
@@ -141,11 +154,11 @@ if ($current_node_version -ge $build_sea_node_verison) { # v25.5.0以上（node 
     New-Item -Force "$PSScriptRoot\build\sea-config.json" -Value "{""main"":""$($PSScriptRoot.Replace("\", "\\"))\\build\\$($main.Replace("\", "\\"))"",""executable"":""$($node_binary_path.Replace("\", "\\"))"",""output"":""$($PSScriptRoot.Replace("\", "\\"))\\build\\$($binary_name.Replace("\", "\\"))"",""disableExperimentalSEAWarning"":true}"
     
     Write-Host "ビルドしています. . . "
-    node --build-sea "$PSScriptRoot\build\sea-config.json"
+    & $node_path --build-sea "$PSScriptRoot\build\sea-config.json"
 }
 else { # v25.5.0未満
     New-Item -Force "$PSScriptRoot\build\sea-config.json" -Value "{""main"":""$($PSScriptRoot.Replace("\", "\\"))\\build\\$($main.Replace("\", "\\"))"",""output"":""$($PSScriptRoot.Replace("\", "\\"))\\build\\sea-prep.blob"",""disableExperimentalSEAWarning"":true}"
-    node --experimental-sea-config "$PSScriptRoot\build\sea-config.json"
+    & $node_path --experimental-sea-config "$PSScriptRoot\build\sea-config.json"
 
     # 出力先の設定
     $name = $json.name
@@ -173,6 +186,6 @@ else { # v25.5.0未満
     npx postject "$PSScriptRoot\build\$build_file" NODE_SEA_BLOB "$PSScriptRoot\build\sea-prep.blob" --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2 --overwrite
 }
 
-Write-Host "操作が完了しました。"
+Write-Host "`r`n操作が完了しました。"
 
 ExitScript
