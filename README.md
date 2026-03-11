@@ -13,10 +13,42 @@ Node SEA (Single executable applications) を使用することで、1つのJava
 
 ## 使い方
 1. `package.json` があるフォルダに、`node_sea_build.ps1` と `node_sea_build.bat` を配置
-2. `node_sea_build.bat` を実行
-3. 環境に合わせてオプションを選択
+2. 別アーキテクチャなど、別の環境向けにビルドする場合は、[下記の手順](#other_platform)に従う
+3. `node_sea_build.bat` を実行
+4. 環境に合わせてオプションを選択
 
 `package.json` に `main` キーがあると、ファイル名指定のときにそのままEnterで実行できて楽です。
+
+<a id="other_platform"></a>
+## 別バージョン、別アーキテクチャ、別プラットフォーム向けにビルドする場合
+`node` フォルダを作成して、ビルド環境と同じバージョンのNode.jsバイナリを配置します。
+<br>
+Windowsの場合は `node.exe`、Linuxの場合は `node` になります。
+
+ビルド環境を変えずにビルドしたい場合は、`host_node` フォルダを作成してビルドするNode.jsのバージョンと同じバージョンのNode.jsバイナリを配置します。
+<br>
+ただし、ビルド環境のNode.jsがv25.5.0以上で、ビルドターゲットのNode.jsがv25.5.0未満の場合、成功しない可能性があります。
+```
+.
+├── node/
+│   ├── node      // v25.8.0 Linux ARM64
+│   └── node.exe  // v25.8.0 Windows x64
+├── host_node/
+│   └── node.exe  // v25.8.0 Windows x64（nodeフォルダのNode.jsとバージョンを合わせる）
+├── node_sea_build.ps1
+└── node_sea_build.bat
+```
+
+## スクリプトのテスト済み環境
+| ビルド環境      | host_nodeバージョン | ビルドターゲット               | 成功したかどうか |
+|:---------------|:-------------------|:------------------------------|:--------------:|
+| Windows 11 x64 | Node.js v25.8.0    | Node.js v25.8.0, Windows x64  | ✅             |
+| Windows 11 x64 | Node.js v25.8.0    | Node.js v25.8.0, Linux ARM64  | ✅             |
+| Windows 11 x64 | Node.js v25.5.0    | Node.js v25.5.0, Windows x64  | ✅             |
+| Windows 11 x64 | Node.js v23.11.0   | Node.js v23.11.0, Windows x64 | ✅             |
+| Windows 11 x64 | Node.js v23.11.0   | Node.js v23.11.0, Linux ARM64 | ✅             |
+| Windows 11 x64 | Node.js v25.8.0    | Node.js v25.5.0, Windows x64  | ❌             |
+| Windows 11 x64 | Node.js v25.8.0    | Node.js v23.11.0, Windows x64 | ❌             |
 
 ## ライセンス
 MITライセンスです。自由に使用、改変、再配布することができますが、著作権表示とライセンス文を保持する必要があります。
