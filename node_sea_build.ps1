@@ -61,7 +61,7 @@ $platform = $LASTEXITCODE
 Write-Host ""
 
 if ($platform -eq 2) {
-    if ((Test-Path "$PSScriptRoot\node\node") -eq "False") {
+    if (-not (Test-Path "$PSScriptRoot\node\node")) {
         Write-Host "nodeフォルダにnodeが見つかりませんでした。"
         Write-Host "Linux向けにビルドするには、nodeフォルダにnodeバイナリを配置する必要があります。"
         ExitScript
@@ -70,7 +70,7 @@ if ($platform -eq 2) {
 
 # package.jsonの読み込み
 $json = '{"main":"main.js"}' | ConvertFrom-Json
-if ((Test-Path "$PSScriptRoot\package.json") -eq "True") {
+if (Test-Path "$PSScriptRoot\package.json") {
     $json = Get-Content -Path "$PSScriptRoot\package.json" -Raw -Encoding UTF8 | ConvertFrom-Json
 }
 
@@ -92,12 +92,12 @@ while ($true) {
         $main = $main_input
     }
 
-    if ((Test-Path "$PSScriptRoot\$main") -eq "True") {
+    if (Test-Path "$PSScriptRoot\$main") {
         break
     }
 
     # 拡張子を省略しても大丈夫
-    if ((Test-Path "$PSScriptRoot\$main.js") -eq "True") {
+    if (Test-Path "$PSScriptRoot\$main.js") {
         $main = "$main.js"
         break
     }
@@ -139,7 +139,7 @@ if ($current_node_version -ge $build_sea_node_verison) { # v25.5.0以上（node 
 
     if ($platform -eq 1) {
         $binary_name = "$name.exe"
-        if ((Test-Path "$PSScriptRoot\node\node.exe") -eq "True") {
+        if (Test-Path "$PSScriptRoot\node\node.exe") {
             $node_binary_path = "$PSScriptRoot\node\node.exe"
         }
         else {
@@ -169,7 +169,7 @@ else { # v25.5.0未満
 
     if ($platform -eq 1) {
         $build_file = "$name.exe"
-        if ((Test-Path "$PSScriptRoot\node\node.exe") -eq "True") {
+        if (Test-Path "$PSScriptRoot\node\node.exe") {
             Copy-Item -Path "$PSScriptRoot\node\node.exe" -Destination "$PSScriptRoot\build\$build_file"
         }
         else {
